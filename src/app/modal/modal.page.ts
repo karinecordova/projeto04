@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-modal',
@@ -11,7 +11,7 @@ export class ModalPage implements OnInit {
   altura:any;
   imc:any;
   status:any;
-  constructor(public modalController: ModalController) { }
+  constructor(public modalController: ModalController,public alertController: AlertController) { }
 
   ngOnInit() {
   }
@@ -26,9 +26,31 @@ export class ModalPage implements OnInit {
     if(this.imc>=20 && this.imc<=24){
       this.status="Peso Normal";
     }
-    if(this.imc>=25 && this.imc<=29){
-      this.status="Acima do Peso ";
+    if(this.imc>=24.1 && this.imc<=29){
+      this.status="Excesso do Peso ";
     }
+    if(this.imc>=29.1 && this.imc<=34){
+       this.status="Obesidade";
+    }
+    if(this.imc>=35){
+      this.status="Obesidade Morbida";
+    }
+
+    console.log(this.status);
+
+    const alert = await this.alertController.create({
+      header: 'Seu índice de massa corporea é: ',
+      subHeader: this.imc,
+      message: this.status,
+      buttons:[{
+        text:'OK',
+        handler:()=>{
+          this.closeModal();
+        }
+      }]
+    });
+
+    await alert.present();
   }
 
 
